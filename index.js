@@ -77,5 +77,11 @@ app.post("/pet/get/:email", (req, res) => {
     });
 });
 
+// Give the level up facilities for pet
+app.post("/pet/levelUp/:email", (req, res) => {
+  let email = req.params.email;
+  let petLevel = db.collection("pets").doc(email).get();
+});
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port}`));

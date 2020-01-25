@@ -17,34 +17,36 @@ let db = admin.firestore();
 
 // Add user details in firebase store
 /* eslint-disable-next-line no-unused-vars */
-app.post("/users/add", (req, res) => {
+app.post("/user/add", (req, res) => {
   const userModel = req.body;
   let userRef = db.collection("users").doc(userModel.id);
   /* eslint-disable-next-line no-unused-vars */
-  let setUser = userRef.set({
-    name: userModel.name,
-    email: userModel.email,
-    is_new: userModel.is_new,
-    pet: userModel.pet,
-    target: userModel.target,
-    daily: userModel.daily,
-    savings: userModel.savings
-  });
+  let setUser = userRef.set({ userModel });
 });
 
 //Add pet details in firebase store
 /* eslint-disable-next-line no-unused-vars */
-app.post("/pets/add", (req, res) => {
+app.post("/pet/add", (req, res) => {
   const petModel = req.body;
   let petRef = db.collection("pets").doc();
   /* eslint-disable-next-line no-unused-vars */
-  let petUser = petRef.set({
-    owner: petModel.owner,
-    name: petModel.name,
-    hp: petModel.hp,
-    xp: petModel.xp,
-    level: petModel.level
-  });
+  let petUser = petRef.set({ petModel });
+});
+
+//Send pet details back to client side
+/* eslint-disable-next-line no-unused-vars */
+app.post("/pet/get/:email", (req, res) => {
+  let email = req.params.email;
+  /* eslint-disable-next-line no-unused-vars */
+  let petQuery = db
+    .collection("pets")
+    .where("owner", "==", email)
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        res.send(doc.data());
+      });
+    });
 });
 
 const port = process.env.PORT || 5000;

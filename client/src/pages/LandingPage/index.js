@@ -5,6 +5,7 @@ import { Button } from "reactstrap";
 import { connect } from "react-redux";
 
 import { authenticateUser } from "../../actions";
+import { post } from "../../api/fetch-backend";
 
 class LandingPage extends Component {
   state = {};
@@ -22,13 +23,7 @@ class LandingPage extends Component {
           name: result.user.displayName,
           email: result.user.email
         };
-        let res = await fetch(`/user/set`, {
-          headers: {
-            "Content-Type": "application/json"
-          },
-          method: "POST",
-          body: JSON.stringify(user)
-        });
+        let res = await post("/user/set", user);
         const response = await res.text();
         const data = JSON.parse(response);
         this.props.authenticateUser(data);

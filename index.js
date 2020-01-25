@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
 const pet = require("arkvatar-ts");
+const cors = require("cors");
 
 let serviceAccount = require("./config/serviceAccountKey.json");
 const app = express();
@@ -9,6 +10,7 @@ const app = express();
 // Setup for Body Parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
 
 //Initialize Firebase
 admin.initializeApp({

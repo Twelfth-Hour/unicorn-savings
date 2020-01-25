@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormGroup, Label, Input, Button, Card, CardBody } from "reactstrap";
 import { authenticateUser, setPet } from "../../actions";
+import { post } from "../../api/fetch-backend";
 
 import "./NewPage.scss";
 
@@ -31,29 +32,16 @@ class NewPage extends Component {
       target: this.state.target,
       isNew: false
     };
-    let resUser = await fetch(`/user/set`, {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify(user)
-    });
+    let resUser = await post("/user/set", user);
     const responseUser = await resUser.text();
     const dataUser = JSON.parse(responseUser);
     this.props.authenticateUser(dataUser);
 
-    let resPet = await fetch(`/pet/set`, {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify(user)
-    });
+    let resPet = await post("/pet/set", pet);
     const responsePet = await resPet.text();
     const dataPet = JSON.parse(responsePet);
     this.props.setPet(dataPet);
-    console.log(dataPet);
-    console.log(dataUser);
+    this.props.history.push("/user");
   };
   render() {
     return (
@@ -63,7 +51,7 @@ class NewPage extends Component {
             <h1>Let's make a new pet</h1>
             <img
               className="pet"
-              src={`https://arkvatar.com/arkvatar/jrathod9@gmail.com`}
+              src={`https://arkvatar.com/arkvatar/${this.props.user.email}`}
               alt="pet"
             />
             <form>
@@ -105,7 +93,7 @@ class NewPage extends Component {
                 />{" "}
                 ₹
               </FormGroup>
-              <Button color="primary" type="submit" onClick={this.submit}>
+              <Button color="primary" onClick={this.submit}>
                 Submit
               </Button>
             </form>

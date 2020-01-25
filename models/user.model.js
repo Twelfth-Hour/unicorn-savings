@@ -1,5 +1,6 @@
 module.exports = {
   id: "hash",
+  auth: false,
   name: "John Doe",
   email: "j@gmail.com",
   is_new: true,

@@ -1,0 +1,3 @@
+export default {
+  AUTHENTICATE_USER: "AUTHENTICATE_USER"
+};

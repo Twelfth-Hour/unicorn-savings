@@ -34,7 +34,6 @@ app.post("/pet/set", (req, res) => {
 });
 
 //Send pet details back to client side
-/* eslint-disable-next-line no-unused-vars */
 app.post("/pet/get/:email", (req, res) => {
   let email = req.params.email;
   /* eslint-disable-next-line no-unused-vars */
@@ -46,6 +45,25 @@ app.post("/pet/get/:email", (req, res) => {
       snapshot.forEach(doc => {
         res.send(doc.data());
       });
+    });
+});
+
+
+// Update pet details based on the xp
+/* eslint-disable-next-line no-unused-vars */
+app.post("/pet/:email", (req, res) => {
+    let email = req.params.email;
+    let petLevel = db.collection("pets").where("owner", "==", email).get()
+    .then(snapshot => {
+        snapshot.forEach(doc => {
+            let data = doc.data();
+            if (req.body.xp >= (data.level * 5)) {
+                let newLevel = req.body.level;
+                db.collection("pets").where("owner", "==", email).set({
+                    level: 
+                })
+            }            
+        });
     });
 });
 

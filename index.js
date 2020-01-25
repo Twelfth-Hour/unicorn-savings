@@ -37,7 +37,10 @@ app.post("/user/set", (req, res) => {
         db.collection("users")
           .doc(userModel.id)
           .set(userModel, { merge: true });
-        res.send(userModel);
+        db.collection("users")
+          .doc(userModel.id)
+          .get()
+          .then(doc => res.send(doc.data()));
       }
     });
 });

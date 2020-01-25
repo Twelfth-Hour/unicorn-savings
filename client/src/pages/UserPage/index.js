@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 class UserPage extends Component {
-  constructor() {
-    console.log(this.props.user);
+  constructor(props) {
+    super(props);
+    console.log(props.user);
   }
   render() {
     return <div>UserPage</div>;

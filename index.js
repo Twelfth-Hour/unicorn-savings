@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
+const pet = require("arkvatar-ts");
 
 let serviceAccount = require("./config/serviceAccountKey.json");
 const app = express();
@@ -23,6 +24,11 @@ app.post("/user/set", (req, res) => {
     .get()
     .then(doc => {
       if (!doc.exists) {
+        (async () => {
+          // Crypto Type are the full name of a cryptocurrency, Ethereum or Ark for example.
+          /* eslint-disable-next-line no-unused-vars */
+          const response = await pet.store(userModel.email, "Ethereum");
+        })();
         userModel.isNew = true;
         userModel.target = 0;
         userModel.daily = 0;
@@ -49,18 +55,29 @@ app.post("/user/set", (req, res) => {
 app.post("/pet/set", (req, res) => {
   let petModel = req.body;
   db.collection("pets")
-    .doc(petModel.email)
+    .doc(petModel.owner)
     .get()
     .then(doc => {
       if (!doc.exists) {
+        petModel.xp = 0;
+        petModel.hp = 100;
+        petModel.level = 0;
         // new pet save to db
         db.collection("pets")
-          .doc(petModel.email)
+          .doc(petModel.owner)
           .set(petModel, { merge: true });
         res.send(petModel);
       } else {
+        // Calculating the level score based on xp
+        petModel.level = (Math.sqrt(25 + 40 * petModel.xp) - 5) / 10;
         // existing user get data from db
-        res.send(doc.data());
+        db.collection("pets")
+          .doc(petModel.owner)
+          .set(petModel, { merge: true });
+        db.collection("pets")
+          .doc(petModel.owner)
+          .get()
+          .then(doc => res.send(doc.data()));
       }
     });
 });
@@ -78,12 +95,6 @@ app.post("/pet/get/:email", (req, res) => {
         res.send(doc.data);
       }
     });
-});
-
-// Give the level up facilities for pet
-app.post("/pet/levelUp/:email", (req, res) => {
-  let email = req.params.email;
-  let petLevel = db.collection("pets").doc(email).get();
 });
 
 const port = process.env.PORT || 5000;

@@ -1,5 +1,4 @@
 module.exports = {
-  id: "skfjlsdk",
   owner: "email of owner",
   name: "Poopo",
   hp: 100,

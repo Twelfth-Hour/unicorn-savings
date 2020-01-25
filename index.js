@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
 const pet = require("arkvatar-ts");
+const cron = require("node-cron");
 
 let serviceAccount = require("./config/serviceAccountKey.json");
 const app = express();
@@ -15,6 +16,23 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 let db = admin.firestore();
+
+// Add crone to run check every midnight
+cron.schedule("0 0 0 * * *", () => {
+  db.collection("pets").get()
+  .then(snapshot => {
+    snapshot.forEach(doc => {
+      let data = doc.data();
+      if (!data.hasPaid) {
+        let hp = data.hp - 2;
+        db.collection("pets").doc(data.owner).update({ hp });
+      } else {
+        let hasPaid = false;
+        db.collection("pets").doc(data.owner).update({ hasPaid });
+      }
+    });
+  });
+});
 
 // Add user details in firebase store
 app.post("/user/set", (req, res) => {

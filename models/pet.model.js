@@ -4,5 +4,6 @@ module.exports = {
   name: "Poopo",
   hp: 100,
   xp: 0,
-  level: 0
+  level: 0,
+  hasPaid: false
 };

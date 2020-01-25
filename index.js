@@ -32,5 +32,20 @@ app.post("/users/add", (req, res) => {
   });
 });
 
+//Add pet details in firebase store
+/* eslint-disable-next-line no-unused-vars */
+app.post("/pets/add", (req, res) => {
+  const petModel = req.body;
+  let petRef = db.collection("pets").doc();
+  /* eslint-disable-next-line no-unused-vars */
+  let petUser = petRef.set({
+    owner: petModel.owner,
+    name: petModel.name,
+    hp: petModel.hp,
+    xp: petModel.xp,
+    level: petModel.level
+  });
+});
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port}`));

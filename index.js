@@ -61,7 +61,7 @@ app.post("/pet/:email", (req, res) => {
             if (req.body.xp >= (data.level * 5)) {
                 let newLevel = req.body.level;
                 db.collection("pets").where("owner", "==", email).set({
-                    level: 
+                    level: 4
                 })
             }            
         });

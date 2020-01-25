@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
 const pet = require("arkvatar-ts");
-const cors = require("cors");
 
 let serviceAccount = require("./config/serviceAccountKey.json");
 const app = express();
@@ -10,7 +9,6 @@ const app = express();
 // Setup for Body Parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors());
 
 //Initialize Firebase
 admin.initializeApp({
@@ -95,8 +93,34 @@ app.post("/pet/get/:email", (req, res) => {
     .then(doc => {
       if (doc.exists) {
         res.send(doc.data);
+      } else {
+        res.send({
+          set: false
+        })
       }
     });
+});
+
+//Create leaderboard based on xp of pet 
+/* eslint-disable-next-line no-unused-vars */
+app.post("/leaderboard", (req, res) => {
+  let name, email, xp;
+  db.collection("pets").orderBy("xp", "desc").get()
+  .then(snapshot => {
+    snapshot.forEach(doc => {
+      let dataPet = doc.data();
+      db.collection("users").where("email", "==", dataPet.owner).get()
+      .then(docUser => {
+        let dataUser = docUser.data();
+        name = dataUser.name;
+        email = dataUser.email;
+      });
+      xp = dataPet.xp;
+      res.json({
+        name, email, xp
+      });
+    });
+  });
 });
 
 const port = process.env.PORT || 5000;

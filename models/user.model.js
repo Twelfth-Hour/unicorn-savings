@@ -3,8 +3,9 @@ module.exports = {
   auth: false,
   name: "John Doe",
   email: "j@gmail.com",
-  is_new: true,
+  isNew: true,
   target: 40000,
   daily: 40,
-  savings: 1000
+  savings: 1000,
+  daysTillRelapse: 0
 };

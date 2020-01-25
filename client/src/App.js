@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import "./assets/lib/scss/black-dashboard-react.scss";
 import LandingPage from "./pages/LandingPage";
+import UserPage from "./pages/UserPage";
 
 class App extends Component {
   state = {};
@@ -12,6 +13,7 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path="/" component={LandingPage} />
+            <Route path="/user" component={UserPage} />
           </Switch>
         </Router>
       </div>

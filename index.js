@@ -23,7 +23,7 @@ app.post("/user/set", (req, res) => {
     .get()
     .then(doc => {
       if (!doc.exists) {
-        userModel.isNew = false;
+        userModel.isNew = true;
         userModel.target = 0;
         userModel.daily = 0;
         userModel.savings = 0;
@@ -37,7 +37,10 @@ app.post("/user/set", (req, res) => {
         db.collection("users")
           .doc(userModel.id)
           .set(userModel, { merge: true });
-        res.send(userModel);
+        db.collection("users")
+          .doc(userModel.id)
+          .get()
+          .then(doc => res.send(doc.data()));
       }
     });
 });

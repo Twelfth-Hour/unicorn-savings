@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import { Button } from "reactstrap";
+import { connect } from "react-redux";
+
+import { authenticateUser } from "../../actions";
 
 class LandingPage extends Component {
   state = {};
@@ -17,11 +20,7 @@ class LandingPage extends Component {
           id: result.user.uid,
           auth: true,
           name: result.user.displayName,
-          email: result.user.email,
-          is_new: false, // set new only to local
-          target: 0,
-          daily: 0,
-          savings: 0
+          email: result.user.email
         };
         let res = await fetch(`/user/set`, {
           headers: {
@@ -31,11 +30,9 @@ class LandingPage extends Component {
           body: JSON.stringify(user)
         });
         const body = await res.text();
-        console.log(body);
+        this.props.authenticateUser(body);
+        this.props.history.push("/user");
       });
-    console.log("Auth Done");
-    // check is user exists in database
-    // login/signup user
   };
   render() {
     return (
@@ -48,4 +45,10 @@ class LandingPage extends Component {
   }
 }
 
-export default LandingPage;
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+
+export default connect(mapStateToProps, { authenticateUser })(LandingPage);

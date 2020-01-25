@@ -16,7 +16,6 @@ admin.initializeApp({
 let db = admin.firestore();
 
 // Add user details in firebase store
-/* eslint-disable-next-line no-unused-vars */
 app.post("/user/set", (req, res) => {
   let userModel = req.body;
   db.collection("users")
@@ -24,6 +23,10 @@ app.post("/user/set", (req, res) => {
     .get()
     .then(doc => {
       if (!doc.exists) {
+        userModel.isNew = false;
+        userModel.target = 0;
+        userModel.daily = 0;
+        userModel.savings = 0;
         // new user save to db
         db.collection("users")
           .doc(userModel.id)
@@ -31,33 +34,46 @@ app.post("/user/set", (req, res) => {
         res.send(userModel);
       } else {
         // existing user get data from db
-        res.send(doc.data());
+        db.collection("users")
+          .doc(userModel.id)
+          .set(userModel, { merge: true });
+        res.send(userModel);
       }
     });
 });
 
 //Add pet details in firebase store
-/* eslint-disable-next-line no-unused-vars */
 app.post("/pet/set", (req, res) => {
-  const petModel = req.body;
-  let petRef = db.collection("pets").doc();
-  /* eslint-disable-next-line no-unused-vars */
-  let petUser = petRef.set(petModel, { merge: true });
+  let petModel = req.body;
+  db.collection("pets")
+    .doc(petModel.email)
+    .get()
+    .then(doc => {
+      if (!doc.exists) {
+        // new pet save to db
+        db.collection("pets")
+          .doc(petModel.email)
+          .set(petModel, { merge: true });
+        res.send(petModel);
+      } else {
+        // existing user get data from db
+        res.send(doc.data());
+      }
+    });
 });
 
 //Send pet details back to client side
-/* eslint-disable-next-line no-unused-vars */
 app.post("/pet/get/:email", (req, res) => {
   let email = req.params.email;
   /* eslint-disable-next-line no-unused-vars */
   let petQuery = db
     .collection("pets")
-    .where("owner", "==", email)
+    .doc(email)
     .get()
-    .then(snapshot => {
-      snapshot.forEach(doc => {
-        res.send(doc.data());
-      });
+    .then(doc => {
+      if (doc.exists) {
+        res.send(doc.data);
+      }
     });
 });
 

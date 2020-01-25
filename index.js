@@ -22,6 +22,7 @@ app.post("/user/set", (req, res) => {
   let userRef = db.collection("users").doc(userModel.id);
   /* eslint-disable-next-line no-unused-vars */
   let setUser = userRef.set(userModel, { merge: true });
+  res.send("success");
 });
 
 //Add pet details in firebase store

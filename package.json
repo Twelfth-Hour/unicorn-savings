@@ -1,0 +1,20 @@
+{
+  "name": "unicorn-savings",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Twelfth-Hour/unicorn-savings",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "prettier": "^1.19.1"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint . --fix",
+    "pretty": "prettier '**/*.js' --write",
+    "format": "npm run pretty && npm run lint"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

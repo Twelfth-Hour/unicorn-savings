@@ -94,7 +94,7 @@ app.post("/pet/get/:email", (req, res) => {
     .get()
     .then(doc => {
       if (doc.exists) {
-        res.send(doc.data);
+        res.send(doc.data());
       }
     });
 });

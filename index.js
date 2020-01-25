@@ -18,11 +18,22 @@ let db = admin.firestore();
 // Add user details in firebase store
 /* eslint-disable-next-line no-unused-vars */
 app.post("/user/set", (req, res) => {
-  const userModel = req.body;
-  let userRef = db.collection("users").doc(userModel.id);
-  /* eslint-disable-next-line no-unused-vars */
-  let setUser = userRef.set(userModel, { merge: true });
-  res.send("success");
+  let userModel = req.body;
+  db.collection("users")
+    .doc(userModel.id)
+    .get()
+    .then(doc => {
+      if (!doc.exists) {
+        // new user save to db
+        db.collection("users")
+          .doc(userModel.id)
+          .set(userModel, { merge: true });
+        res.send(userModel);
+      } else {
+        // existing user get data from db
+        res.send(doc.data());
+      }
+    });
 });
 
 //Add pet details in firebase store

@@ -23,6 +23,10 @@ app.post("/user/set", (req, res) => {
     .get()
     .then(doc => {
       if (!doc.exists) {
+        userModel.isNew = false;
+        userModel.target = 0;
+        userModel.daily = 0;
+        userModel.savings = 0;
         // new user save to db
         db.collection("users")
           .doc(userModel.id)
@@ -30,7 +34,10 @@ app.post("/user/set", (req, res) => {
         res.send(userModel);
       } else {
         // existing user get data from db
-        res.send(doc.data());
+        db.collection("users")
+          .doc(userModel.id)
+          .set(userModel, { merge: true });
+        res.send(userModel);
       }
     });
 });

@@ -25,18 +25,14 @@ git clone https://github.com/Twelfth-Hour/unicorn-savings
 yarn install
 yarn format
 yarn start
-
 ```
 
 3. Open a new terminal and move into the client directory using `cd client` and repeat the step 2.
 
 ```
 yarn install
-
 yarn format
-
 yarn start
-
 ```
 
 4. The website will run on `localhost:3000` with the back-end running on `localhost:5000`.

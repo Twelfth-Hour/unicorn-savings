@@ -6,3 +6,10 @@ export const authenticateUser = user => {
     payload: user
   };
 };
+
+export const setPet = pet => {
+  return {
+    type: actions.SET_PET,
+    payload: pet
+  };
+};

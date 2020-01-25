@@ -1,0 +1,26 @@
+.NewPage {
+  padding: 20px 20%;
+
+  input.short {
+    display: inline;
+  }
+
+  .pet {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 20px;
+  }
+
+  input {
+    width: 250px;
+  }
+
+  .short {
+    width: 100px;
+  }
+
+  label {
+    font-size: 1.2em;
+  }
+}

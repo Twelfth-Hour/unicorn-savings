@@ -8,6 +8,14 @@ const userReducer = (state = { auth: false }, action) => {
   return state;
 };
 
+const petReducer = (state = { set: false }, action) => {
+  if (action.type === actions.SET_PET) {
+    return action.payload;
+  }
+  return state;
+};
+
 export default combineReducers({
-  user: userReducer
+  user: userReducer,
+  pet: petReducer
 });

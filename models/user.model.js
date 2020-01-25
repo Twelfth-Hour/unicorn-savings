@@ -7,5 +7,4 @@ module.exports = {
   target: 40000,
   daily: 40,
   savings: 1000,
-  daysTillRelapse: 0
 };

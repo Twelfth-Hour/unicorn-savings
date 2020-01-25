@@ -29,9 +29,14 @@ class LandingPage extends Component {
           method: "POST",
           body: JSON.stringify(user)
         });
-        const body = await res.text();
-        this.props.authenticateUser(body);
-        this.props.history.push("/user");
+        const response = await res.text();
+        const data = JSON.parse(response);
+        this.props.authenticateUser(data);
+        if (data.isNew) {
+          this.props.history.push("/new");
+        } else {
+          this.props.history.push("/user");
+        }
       });
   };
   render() {

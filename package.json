@@ -15,6 +15,7 @@
     "format": "npm run pretty && npm run lint"
   },
   "dependencies": {
+    "arkvatar-ts": "^1.0.3",
     "express": "^4.17.1"
   }
 }

@@ -17,20 +17,20 @@ let db = admin.firestore();
 
 // Add user details in firebase store
 /* eslint-disable-next-line no-unused-vars */
-app.post("/user/add", (req, res) => {
+app.post("/user/set", (req, res) => {
   const userModel = req.body;
   let userRef = db.collection("users").doc(userModel.id);
   /* eslint-disable-next-line no-unused-vars */
-  let setUser = userRef.set({ userModel });
+  let setUser = userRef.set(userModel, { merge: true });
 });
 
 //Add pet details in firebase store
 /* eslint-disable-next-line no-unused-vars */
-app.post("/pet/add", (req, res) => {
+app.post("/pet/set", (req, res) => {
   const petModel = req.body;
   let petRef = db.collection("pets").doc();
   /* eslint-disable-next-line no-unused-vars */
-  let petUser = petRef.set({ petModel });
+  let petUser = petRef.set(petModel, { merge: true });
 });
 
 //Send pet details back to client side

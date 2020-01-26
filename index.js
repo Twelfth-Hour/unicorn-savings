@@ -130,30 +130,23 @@ app.post("/pet/get/:email", (req, res) => {
 /* eslint-disable-next-line no-unused-vars */
 app.post("/leaderboard/:email", (req, res) => {
   let email = req.params.email;
-  let name, emailId, xp;
+  // let name, xp;
   let array = [];
-  let counter = 1, ownerRank;
+  let counter = 1,
+    ownerRank;
   db.collection("pets")
     .orderBy("xp", "desc")
     .get()
     .then(snapshot => {
       snapshot.forEach(doc => {
-        counter++;
         let dataPet = doc.data();
-        if (dataPet.owner == email) {
+        if (dataPet.owner === email) {
           ownerRank = counter;
-        } else if (counter <= 3) {
-          db.collection("users")
-          .where("email", "==", email)
-          .get()
-          .then(docUser => {
-            let dataUser = docUser.data();
-            name = dataUser.name;
-            emailId = dataUser.email;
-          });
-        xp = dataPet.xp;
-        array.push({ name, emailId, xp })
         }
+        if (counter <= 3) {
+          array.push(dataPet);
+        }
+        counter++;
       });
       res.send({ array, ownerRank });
     });
@@ -165,22 +158,26 @@ app.post("/badges/:email", (req, res) => {
   let email = req.params.email;
   let dailySavings = req.body.daily;
   let badges = [];
-  db.collection("users").where("email", "==", email).get()
-  .then(docUser => {
-    let dataUser = docUser.data();
-    if (dataUser.isNew) {
-      badges.push(1); // *Create first Avatar
-    } else if (dailySavings > dataUser.daily) {
-      badges.push(3); // *Saving more than the daily saving specified
-    }
-  });
-  db.collection("pets").doc(email).get()
-  .then(docPet => {
-    let dataPet = docPet.data();
-    if (dataPet.level == 1) {
-      badges.push(2); // *Make first savings and reach level 1
-    }
-  });
+  db.collection("users")
+    .where("email", "==", email)
+    .get()
+    .then(docUser => {
+      let dataUser = docUser.data();
+      if (dataUser.isNew) {
+        badges.push(1); // *Create first Avatar
+      } else if (dailySavings > dataUser.daily) {
+        badges.push(3); // *Saving more than the daily saving specified
+      }
+    });
+  db.collection("pets")
+    .doc(email)
+    .get()
+    .then(docPet => {
+      let dataPet = docPet.data();
+      if (dataPet.level == 1) {
+        badges.push(2); // *Make first savings and reach level 1
+      }
+    });
   res.send(badges);
 });
 

@@ -107,7 +107,9 @@ const options = {
 class UserPage extends Component {
   state = {
     modal: false,
-    nextLevel: 1000
+    nextLevel: 1000,
+    leaderboard: [],
+    rank: 1
   };
   async componentDidMount() {
     if (!this.props.user.auth) {
@@ -118,9 +120,23 @@ class UserPage extends Component {
     const data = JSON.parse(response);
     this.props.setPet(data);
     this.setState({ nextLevel: (5 * (this.props.pet.level + 1) * (this.props.pet.level + 2)) / 2 });
+    let a = await post(`/leaderboard/${this.props.user.email}`);
+    const b = await a.json();
+    this.setState({ leaderboard: b.array, rank: b.ownerRank });
   }
   toggleModal = () => {
     this.setState({ modal: !this.state.modal });
+  };
+  renderTable = () => {
+    return this.state.leaderboard.map((user, index) => {
+      return (
+        <tr key={index}>
+          <td>{index + 1}</td>
+          <td>{user.name}</td>
+          <td>{user.xp}</td>
+        </tr>
+      );
+    });
   };
   render() {
     return (
@@ -196,23 +212,7 @@ class UserPage extends Component {
                     <th>XP</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Tanjiro</td>
-                    <td>755</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>ButterCup</td>
-                    <td>510</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Banme</td>
-                    <td>400</td>
-                  </tr>
-                </tbody>
+                <tbody>{this.renderTable()}</tbody>
               </Table>
             </Col>
             <Col>
@@ -220,6 +220,7 @@ class UserPage extends Component {
               <h4>Savings Today: 30₹</h4>
               <h4>XP for next level: {this.state.nextLevel - this.props.pet.xp}</h4>
               <h4>Average Saving for Last Week: 45.8₹</h4>
+              <h4>Your Rank: {this.state.rank}</h4>
             </Col>
           </Row>
         </div>

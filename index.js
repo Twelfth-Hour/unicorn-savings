@@ -126,32 +126,62 @@ app.post("/pet/get/:email", (req, res) => {
     });
 });
 
-//Create leaderboard based on xp of pet
+//Create leaderboard based on xp of pet (top 3)
 /* eslint-disable-next-line no-unused-vars */
-app.post("/leaderboard", (req, res) => {
-  let name, email, xp;
+app.post("/leaderboard/:email", (req, res) => {
+  let email = req.params.email;
+  let name, emailId, xp;
+  let array = [];
+  let counter = 1, ownerRank;
   db.collection("pets")
     .orderBy("xp", "desc")
     .get()
     .then(snapshot => {
       snapshot.forEach(doc => {
+        counter++;
         let dataPet = doc.data();
-        db.collection("users")
-          .where("email", "==", dataPet.owner)
+        if (dataPet.owner == email) {
+          ownerRank = counter;
+        } else if (counter <= 3) {
+          db.collection("users")
+          .where("email", "==", email)
           .get()
           .then(docUser => {
             let dataUser = docUser.data();
             name = dataUser.name;
-            email = dataUser.email;
+            emailId = dataUser.email;
           });
         xp = dataPet.xp;
-        res.json({
-          name,
-          email,
-          xp
-        });
+        array.push({ name, emailId, xp })
+        }
       });
+      res.send({ array, ownerRank });
     });
+});
+
+//Add badges pertaining to certain criteria
+/* eslint-disable-next-line no-unused-vars */
+app.post("/badges/:email", (req, res) => {
+  let email = req.params.email;
+  let dailySavings = req.body.daily;
+  let badges = [];
+  db.collection("users").where("email", "==", email).get()
+  .then(docUser => {
+    let dataUser = docUser.data();
+    if (dataUser.isNew) {
+      badges.push(1); // *Create first Avatar
+    } else if (dailySavings > dataUser.daily) {
+      badges.push(3); // *Saving more than the daily saving specified
+    }
+  });
+  db.collection("pets").doc(email).get()
+  .then(docPet => {
+    let dataPet = docPet.data();
+    if (dataPet.level == 1) {
+      badges.push(2); // *Make first savings and reach level 1
+    }
+  });
+  res.send(badges);
 });
 
 const port = process.env.PORT || 5000;

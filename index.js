@@ -1,8 +1,8 @@
 const express = require("express");
-const secretKey = require("./config/stripeKey.json").secretKey;
-const stripe = require("stripe")(secretKey, {
-  apiVersion: "2019-11-05"
-});
+//const secretKey = require("./config/stripeKey.json").secretKey;
+//const stripe = require("stripe")(secretKey, {
+//  apiVersion: "2019-11-05"
+//});
 const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
 const pet = require("arkvatar-ts");
@@ -196,9 +196,9 @@ app.post("/badges", (req, res) => {
     });
   res.send(badges);
 });
-
+/*
 //Add stripe payment gateway integration
-/* eslint-disable-next-line no-unused-vars */
+// eslint-disable-next-line no-unused-vars 
 app.post("/payment/:amount", (req, res) => {
   const amount = req.params.amount;
   stripe.customers.create({
@@ -215,7 +215,7 @@ app.post("/payment/:amount", (req, res) => {
       res.status(500).send({error: "Payment Failed,your pet is hungry!"});
     });
   });
-});
+});*/
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port}`));

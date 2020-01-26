@@ -59,7 +59,10 @@ class UserPage extends Component {
     if (this._isMounted) {
       this.setState({ leaderboard: b.array, rank: b.ownerRank });
     }
-    let c = await post(`/badges/${this.props.user.email}`);
+    let c = await post("/badges", {
+      user: this.props.user,
+      pet: this.props.pet
+    });
     const d = await c.json();
     if (this._isMounted) {
       this.setState({

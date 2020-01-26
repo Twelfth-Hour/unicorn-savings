@@ -184,6 +184,8 @@ app.post("/badges/:email", (req, res) => {
       let dataPet = docPet.data();
       if (dataPet.level == 1) {
         badges.push(2); // *Make first savings and reach level 1
+      } else if(!dataPet.history.includes(0)) {
+        badges.push(4); // *Kept a streak for 7 days with hp as 100 and saving every day
       }
     });
   res.send(badges);

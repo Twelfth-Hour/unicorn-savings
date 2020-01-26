@@ -6,7 +6,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
 const pet = require("arkvatar-ts");
-const cron = require("node-cron"); 
+const cron = require("node-cron");
 const cors = require("cors");
 
 let serviceAccount = require("./config/serviceAccountKey.json");
@@ -99,6 +99,7 @@ app.post("/pet/set", (req, res) => {
         petModel.hasPaid = false;
         petModel.todaySaved = 0;
         petModel.history = [0, 0, 0, 0, 0, 0, 0];
+        petModel.badges = [0, 0, 0, 0];
         // new pet save to db
         db.collection("pets")
           .doc(petModel.owner)
@@ -170,8 +171,8 @@ app.post("/leaderboard/:email", (req, res) => {
 app.post("/badges", (req, res) => {
   let email = req.body.user.email;
   let dailySavings = req.body.pet.todaySaved;
-  let badges = [];
-  badges.push(1); // *For creating a new avatar
+  // *For creating an avatar
+  req.body.pet.badges[0] = 1;
   db.collection("users")
     .where("email", "==", email)
     .get()
@@ -179,7 +180,8 @@ app.post("/badges", (req, res) => {
       snapshot.forEach(docUser => {
         let dataUser = docUser.data();
         if (dailySavings > dataUser.daily) {
-          badges.push(3); // *Saving more than the daily saving specified
+          // *Saving more than the daily saving specified
+          req.body.pet.badges[2] = 1;
         }
       });
     });
@@ -189,12 +191,13 @@ app.post("/badges", (req, res) => {
     .then(docPet => {
       let dataPet = docPet.data();
       if (dataPet.level >= 1) {
-        badges.push(2); // *Make first savings and reach level 1
-      } else if(!dataPet.history.includes(0)) {
-        badges.push(4); // *Kept a streak for 7 days with hp as 100 and saving every day
+        // *Make first savings and reach level 1
+        req.body.pet.badges[1] = 1;
+      } else if (!dataPet.history.includes(0)) {
+        // *Kept a streak for 7 days with hp as 100 and saving every day
+        req.body.pet.badges[3] = 1;
       }
     });
-  res.send(badges);
 });
 /*
 //Add stripe payment gateway integration

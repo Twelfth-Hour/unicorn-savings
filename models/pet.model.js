@@ -8,4 +8,5 @@ module.exports = {
   hasPaid: false,
   todaySaved: 12,
   history: [45, 12, 5, 12, 56, 12, 78],
+  badges: [1, 1, 1, 1]
 };

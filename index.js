@@ -26,16 +26,21 @@ cron.schedule("0 0 0 * * *", () => {
     .then(snapshot => {
       snapshot.forEach(doc => {
         let data = doc.data();
+        let history = data.history;
+        history.shift();
         if (!data.hasPaid) {
+          history.push(data.todaySaved);
           let hp = data.hp - 2;
           db.collection("pets")
             .doc(data.owner)
             .update({ hp });
         } else {
+          history.push(data.todaySaved);
           let hasPaid = false;
+          let todaySaved = 0;
           db.collection("pets")
             .doc(data.owner)
-            .update({ hasPaid });
+            .update({ hasPaid, todaySaved });
         }
       });
     });

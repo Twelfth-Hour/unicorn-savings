@@ -172,6 +172,7 @@ app.post("/badges", (req, res) => {
   let email = req.body.user.email;
   let dailySavings = req.body.pet.todaySaved;
   // *For creating an avatar
+  req.body.pet.badges[0] = 1;
   db.collection("users")
     .where("email", "==", email)
     .get()
@@ -180,6 +181,7 @@ app.post("/badges", (req, res) => {
         let dataUser = docUser.data();
         if (dailySavings > dataUser.daily) {
           // *Saving more than the daily saving specified
+          req.body.pet.badges[2] = 1;
         }
       });
     });
@@ -191,8 +193,10 @@ app.post("/badges", (req, res) => {
       let dataPet = docPet.data();
       if (dataPet.level >= 1) {
          // *Make first savings and reach level 1
+         req.body.pet.badges[1] = 1;
       } else if (!dataPet.history.includes(0)) {
         // *Kept a streak for 7 days with hp as 100 and saving every day
+        req.body.pet.badges[3] = 1;
       }
     });
   console.log(badgeQuery);

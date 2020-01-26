@@ -16,7 +16,7 @@ import {
 import { Line } from "react-chartjs-2";
 
 import { post } from "../../api/fetch-backend";
-import { setPet } from "../../actions";
+import { authenticateUser, setPet } from "../../actions";
 import "./UserPage.scss";
 
 import badge1 from "../../assets/svg/first.svg";
@@ -30,7 +30,8 @@ class UserPage extends Component {
     nextLevel: 1000,
     leaderboard: [],
     rank: 1,
-    history: [0, 0, 0, 0, 0, 0, 0]
+    history: [0, 0, 0, 0, 0, 0, 0],
+    amountToSave: 0
   };
   async componentDidMount() {
     if (!this.props.user.auth) {
@@ -61,6 +62,27 @@ class UserPage extends Component {
         </tr>
       );
     });
+  };
+  handlePayField = e => {
+    this.setState({ amountToSave: e.target.value });
+  };
+  handlePay = async () => {
+    const amount = Number(this.state.amountToSave);
+    let a = await post("/user/set", {
+      id: this.props.user.id,
+      savings: amount + this.props.user.savings
+    });
+    let b = await a.json();
+    this.props.authenticateUser(b);
+    let c = await post("/pet/set", {
+      owner: this.props.user.email,
+      xp: this.props.pet.xp + 5,
+      hasPayed: true,
+      todaySaved: this.props.pet.todaySaved + amount
+    });
+    let d = await c.json();
+    this.props.setPet(d);
+    this.toggleModal();
   };
   render() {
     const data = canvas => {
@@ -154,20 +176,24 @@ class UserPage extends Component {
           </Card>
           <div id="target">
             <h1>Todays Target</h1>
-            <h1 id="money-left">45₹</h1>
+            <h1 id="money-left">{this.props.user.daily - this.props.pet.todaySaved}₹</h1>
             <Modal isOpen={this.state.modal} toggle={this.toggleModalDemo}>
               <div className="modal-header">
                 <h1 className="modal-title">Select Amount</h1>
               </div>
               <ModalBody>
                 <p>Amount to Save</p>
-                <input type="number" />
+                <input
+                  type="number"
+                  value={this.state.amountToSave}
+                  onChange={this.handlePayField}
+                />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" className="btn-simple" onClick={this.toggleModal}>
                   Close
                 </Button>
-                <Button color="primary" onClick={this.toggleModal}>
+                <Button color="primary" onClick={this.handlePay}>
                   Pay
                 </Button>
               </ModalFooter>
@@ -220,7 +246,7 @@ class UserPage extends Component {
             </Col>
             <Col>
               <h2>Vitals</h2>
-              <h4>Savings Today: 30₹</h4>
+              <h4>Savings Today: {this.props.pet.todaySaved}₹</h4>
               <h4>XP for next level: {this.state.nextLevel - this.props.pet.xp}</h4>
               <h4>
                 Average Saving for Last Week:{" "}
@@ -245,4 +271,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { setPet })(UserPage);
+export default connect(mapStateToProps, { authenticateUser, setPet })(UserPage);

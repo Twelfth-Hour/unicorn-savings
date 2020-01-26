@@ -1,14 +1,16 @@
 import React, { Component } from "react";
 import * as firebase from "firebase/app";
 import "firebase/auth";
-import { Button } from "reactstrap";
+import { Button, Row, Col } from "reactstrap";
 import { connect } from "react-redux";
 
 import { authenticateUser, setPet } from "../../actions";
 import { post } from "../../api/fetch-backend";
 
+import "./LandingPage.scss";
+import icon from "../../assets/svg/unicorn.svg";
+
 class LandingPage extends Component {
-  state = {};
   handleAuth = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -41,10 +43,24 @@ class LandingPage extends Component {
   };
   render() {
     return (
-      <div>
-        <Button color="primary" onClick={this.handleAuth}>
-          Auth
-        </Button>
+      <div className="LandingPage">
+        <nav className="nav">
+          <Button className="btn-simple" color="primary" onClick={this.handleAuth}>
+            Log In
+          </Button>
+          <Button color="primary" onClick={this.handleAuth}>
+            Sign Up
+          </Button>
+        </nav>
+        <Row>
+          <Col>
+            <img className="title-image" src={icon} alt="main" />
+          </Col>
+          <Col>
+            <h1 className="title">Unicorn Savings</h1>
+            <h1 className="subtitle">The Savings Platform You've been Dreaming About.</h1>
+          </Col>
+        </Row>
       </div>
     );
   }

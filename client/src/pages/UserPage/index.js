@@ -32,11 +32,12 @@ class UserPage extends Component {
     nextLevel: 1000,
     leaderboard: [],
     rank: 1,
-    history: [0, 0, 0, 0, 0, 0, 0],
+    history: [0, 0, 0, 0, 0, 0, this.props.pet.todaySaved],
     amountToSave: 0
   };
   componentDidMount = async () => {
-    console.log(this.props);
+    console.log(this.props.user);
+    console.log(this.props.pet);
     if (this.props.user.auth === false) {
       console.log(this.props);
       this.props.history.push("/");
@@ -47,9 +48,12 @@ class UserPage extends Component {
     const data = JSON.parse(response);
     this.props.setPet(data);
     if (this._isMounted) {
+      let a = [...this.props.pet.history];
+      a.push(this.props.pet.todaySaved);
+      a.shift();
       this.setState({
         nextLevel: (5 * (this.props.pet.level + 1) * (this.props.pet.level + 2)) / 2,
-        history: this.props.pet.history
+        history: a
       });
     }
     let a = await post(`/leaderboard/${this.props.user.email}`);
@@ -89,12 +93,12 @@ class UserPage extends Component {
     let c = await post("/pet/set", {
       owner: this.props.user.email,
       xp: this.props.pet.xp + 5,
-      hasPayed: true,
+      hasPaid: true,
       todaySaved: this.props.pet.todaySaved + amount
     });
     let d = await c.json();
     this.props.setPet(d);
-    this.toggleModal();
+    window.location.reload();
   };
   render() {
     const data = canvas => {
@@ -268,6 +272,7 @@ class UserPage extends Component {
                 ₹
               </h4>
               <h4>Your Rank: {this.state.rank}</h4>
+              <h4>Total Savings: {this.props.user.savings}₹</h4>
             </Col>
           </Row>
         </div>

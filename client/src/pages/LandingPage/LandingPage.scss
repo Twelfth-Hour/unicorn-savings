@@ -1,0 +1,30 @@
+.LandingPage {
+  padding: 40px 12%;
+
+  nav {
+    display: flex;
+    flex-direction: row-reverse;
+
+    button {
+      margin: 5px;
+    }
+  }
+
+  .title-image {
+    width: 80%;
+    margin-top: 50px;
+  }
+
+  .title {
+    margin-top: 80px;
+    margin-bottom: 50px;
+    font-size: 4.8em;
+    text-transform: uppercase;
+  }
+
+  .subtitle {
+    font-size: 2em;
+    letter-spacing: 0.1em;
+    line-height: 1.5em;
+  }
+}

@@ -3,16 +3,26 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import * as firebase from "firebase";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage
+import { PersistGate } from "redux-persist/integration/react";
 
 import firebaseConfig from "./config/firebase.config";
 import reducers from "./reducers";
 import App from "./App";
 
-const store = createStore(reducers);
+const persistConfig = {
+  key: "root",
+  storage
+};
+const persistedReducers = persistReducer(persistConfig, reducers);
+const store = createStore(persistedReducers);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <PersistGate loading={null} persistor={persistStore(store)}>
+      <App />
+    </PersistGate>
   </Provider>,
   document.getElementById("root")
 );

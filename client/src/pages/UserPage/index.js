@@ -25,6 +25,8 @@ import badge3 from "../../assets/svg/hero.svg";
 const chartColor = "#FFFFFF";
 
 class UserPage extends Component {
+  _isMounted = false;
+
   state = {
     modal: false,
     nextLevel: 1000,
@@ -33,21 +35,31 @@ class UserPage extends Component {
     history: [0, 0, 0, 0, 0, 0, 0],
     amountToSave: 0
   };
-  async componentDidMount() {
-    if (!this.props.user.auth) {
+  componentDidMount = async () => {
+    console.log(this.props);
+    if (this.props.user.auth === false) {
+      console.log(this.props);
       this.props.history.push("/");
     }
+    this._isMounted = true;
     let res = await post(`/pet/get/${this.props.user.email}`);
     const response = await res.text();
     const data = JSON.parse(response);
     this.props.setPet(data);
-    this.setState({
-      nextLevel: (5 * (this.props.pet.level + 1) * (this.props.pet.level + 2)) / 2,
-      history: this.props.pet.history
-    });
+    if (this._isMounted) {
+      this.setState({
+        nextLevel: (5 * (this.props.pet.level + 1) * (this.props.pet.level + 2)) / 2,
+        history: this.props.pet.history
+      });
+    }
     let a = await post(`/leaderboard/${this.props.user.email}`);
     const b = await a.json();
-    this.setState({ leaderboard: b.array, rank: b.ownerRank });
+    if (this._isMounted) {
+      this.setState({ leaderboard: b.array, rank: b.ownerRank });
+    }
+  };
+  componentWillUnmount() {
+    this._isMounted = false;
   }
   toggleModal = () => {
     this.setState({ modal: !this.state.modal });

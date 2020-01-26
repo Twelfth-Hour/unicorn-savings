@@ -164,22 +164,24 @@ app.post("/leaderboard/:email", (req, res) => {
 app.post("/badges/:email", (req, res) => {
   let email = req.params.email;
   let dailySavings = req.body.daily;
+  let badges = [];
   db.collection("users").where("email", "==", email).get()
   .then(docUser => {
     let dataUser = docUser.data();
     if (dataUser.isNew) {
-      res.send({ badge: 1 }); // *Create first Avatar
+      badges.push(1); // *Create first Avatar
     } else if (dailySavings > dataUser.daily) {
-      res.send({ badge: 4 }); // *Saving more than the daily saving specified
+      badges.push(3); // *Saving more than the daily saving specified
     }
   });
   db.collection("pets").doc(email).get()
   .then(docPet => {
     let dataPet = docPet.data();
     if (dataPet.level == 1) {
-      res.send({ badge: 2 }); // *Make first savings and reach level 1
+      badges.push(2); // *Make first savings and reach level 1
     }
   });
+  res.send(badges);
 });
 
 const port = process.env.PORT || 5000;

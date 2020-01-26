@@ -99,7 +99,6 @@ app.post("/pet/set", (req, res) => {
         petModel.hasPaid = false;
         petModel.todaySaved = 0;
         petModel.history = [0, 0, 0, 0, 0, 0, 0];
-        petModel.badges = [0, 0, 0, 0];
         // new pet save to db
         db.collection("pets")
           .doc(petModel.owner)
@@ -165,40 +164,6 @@ app.post("/leaderboard/:email", (req, res) => {
     });
 });
 
-//Add badges pertaining to certain criteria
-
-/* eslint-disable-next-line no-unused-vars */
-app.post("/badges", (req, res) => {
-  let email = req.body.user.email;
-  let dailySavings = req.body.pet.todaySaved;
-  // *For creating an avatar
-  req.body.pet.badges[0] = 1;
-  db.collection("users")
-    .where("email", "==", email)
-    .get()
-    .then(snapshot => {
-      snapshot.forEach(docUser => {
-        let dataUser = docUser.data();
-        if (dailySavings > dataUser.daily) {
-          // *Saving more than the daily saving specified
-          req.body.pet.badges[2] = 1;
-        }
-      });
-    });
-  db.collection("pets")
-    .doc(email)
-    .get()
-    .then(docPet => {
-      let dataPet = docPet.data();
-      if (dataPet.level >= 1) {
-        // *Make first savings and reach level 1
-        req.body.pet.badges[1] = 1;
-      } else if (!dataPet.history.includes(0)) {
-        // *Kept a streak for 7 days with hp as 100 and saving every day
-        req.body.pet.badges[3] = 1;
-      }
-    });
-});
 /*
 //Add stripe payment gateway integration
 // eslint-disable-next-line no-unused-vars 

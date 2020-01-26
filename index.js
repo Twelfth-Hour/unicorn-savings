@@ -99,6 +99,7 @@ app.post("/pet/set", (req, res) => {
         petModel.hasPaid = false;
         petModel.todaySaved = 0;
         petModel.history = [0, 0, 0, 0, 0, 0, 0];
+        petModel.badges = [0, 0, 0, 0];
         // new pet save to db
         db.collection("pets")
           .doc(petModel.owner)
@@ -170,11 +171,7 @@ app.post("/leaderboard/:email", (req, res) => {
 app.post("/badges", (req, res) => {
   let email = req.body.user.email;
   let dailySavings = req.body.pet.todaySaved;
-  let badgeQuery = db
-    .collection("pets")
-    .doc(email)
-    .doc("badges");
-  badgeQuery.set({ 1: 1 });
+  // *For creating an avatar
   db.collection("users")
     .where("email", "==", email)
     .get()
@@ -182,7 +179,7 @@ app.post("/badges", (req, res) => {
       snapshot.forEach(docUser => {
         let dataUser = docUser.data();
         if (dailySavings > dataUser.daily) {
-          badgeQuery.set({ 3: 3 }); // *Saving more than the daily saving specified
+          // *Saving more than the daily saving specified
         }
       });
     });
@@ -193,9 +190,9 @@ app.post("/badges", (req, res) => {
     .then(docPet => {
       let dataPet = docPet.data();
       if (dataPet.level >= 1) {
-        badgeQuery.set({ 2: 2 }); // *Make first savings and reach level 1
+         // *Make first savings and reach level 1
       } else if (!dataPet.history.includes(0)) {
-        badgeQuery.set({ 4: 4 }); // *Kept a streak for 7 days with hp as 100 and saving every day
+        // *Kept a streak for 7 days with hp as 100 and saving every day
       }
     });
   console.log(badgeQuery);

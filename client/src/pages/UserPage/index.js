@@ -22,6 +22,7 @@ import "./UserPage.scss";
 import badge1 from "../../assets/svg/first.svg";
 import badge2 from "../../assets/svg/seven.svg";
 import badge3 from "../../assets/svg/hero.svg";
+import badge4 from "../../assets/svg/paw.svg";
 const chartColor = "#FFFFFF";
 
 class UserPage extends Component {
@@ -244,9 +245,14 @@ class UserPage extends Component {
           <Row>
             <Col>
               <h2>Badges</h2>
-              <img className="badge-icon" src={badge1} alt="badge" />
-              <img className="badge-icon" src={badge2} alt="badge" />
-              <img className="badge-icon" src={badge3} alt="badge" />
+              <img className="badge-icon" src={badge4} alt="badge" />
+              {this.props.pet.level >= 1 && <img className="badge-icon" src={badge1} alt="badge" />}
+              {!this.props.pet.history.includes(0) && (
+                <img className="badge-icon" src={badge2} alt="badge" />
+              )}
+              {this.props.pet.todaySaved > this.props.user.daily && (
+                <img className="badge-icon" src={badge3} alt="badge" />
+              )}
             </Col>
             <Col>
               <h2>Stats</h2>

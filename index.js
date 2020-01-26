@@ -92,6 +92,9 @@ app.post("/pet/set", (req, res) => {
         petModel.xp = 0;
         petModel.hp = 100;
         petModel.level = 0;
+        petModel.hasPaid = false;
+        petModel.todaySaved = 0;
+        petModel.history = [0, 0, 0, 0, 0, 0, 0];
         // new pet save to db
         db.collection("pets")
           .doc(petModel.owner)
@@ -99,11 +102,11 @@ app.post("/pet/set", (req, res) => {
         res.send(petModel);
       } else {
         // Calculating the level score based on xp
-        petModel.level = Math.floor((Math.sqrt(25 + 40 * petModel.xp) - 5) / 10);
+        let level = Math.floor((Math.sqrt(25 + 40 * petModel.xp) - 5) / 10);
         // existing user get data from db
         db.collection("pets")
           .doc(petModel.owner)
-          .set(petModel, { merge: true });
+          .set({ level }, { merge: true });
         db.collection("pets")
           .doc(petModel.owner)
           .get()

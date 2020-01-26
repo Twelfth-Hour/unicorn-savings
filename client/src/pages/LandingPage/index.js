@@ -4,7 +4,7 @@ import "firebase/auth";
 import { Button } from "reactstrap";
 import { connect } from "react-redux";
 
-import { authenticateUser } from "../../actions";
+import { authenticateUser, setPet } from "../../actions";
 import { post } from "../../api/fetch-backend";
 
 class LandingPage extends Component {
@@ -30,6 +30,11 @@ class LandingPage extends Component {
         if (data.isNew) {
           this.props.history.push("/new");
         } else {
+          let res = await post(`/pet/get/${user.email}`, { owner: user.email });
+          const data = await res.json();
+          let res2 = await post("/pet/set", { owner: user.email, xp: data.xp });
+          const data2 = await res2.json();
+          this.props.setPet(data2);
           this.props.history.push("/user");
         }
       });
@@ -51,4 +56,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { authenticateUser })(LandingPage);
+export default connect(mapStateToProps, { authenticateUser, setPet })(LandingPage);

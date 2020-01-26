@@ -33,13 +33,11 @@ class UserPage extends Component {
     leaderboard: [],
     rank: 1,
     history: [0, 0, 0, 0, 0, 0, this.props.pet.todaySaved],
-    amountToSave: 0
+    amountToSave: 0,
+    badges: []
   };
   componentDidMount = async () => {
-    console.log(this.props.user);
-    console.log(this.props.pet);
     if (this.props.user.auth === false) {
-      console.log(this.props);
       this.props.history.push("/");
     }
     this._isMounted = true;
@@ -60,6 +58,14 @@ class UserPage extends Component {
     const b = await a.json();
     if (this._isMounted) {
       this.setState({ leaderboard: b.array, rank: b.ownerRank });
+    }
+    let c = await post(`/badges/${this.props.user.email}`);
+    const d = await c.json();
+    if (this._isMounted) {
+      this.setState({
+        badges: d
+      });
+      console.log(d);
     }
   };
   componentWillUnmount() {

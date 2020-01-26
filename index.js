@@ -94,7 +94,7 @@ app.post("/pet/set", (req, res) => {
         res.send(petModel);
       } else {
         // Calculating the level score based on xp
-        petModel.level = (Math.sqrt(25 + 40 * petModel.xp) - 5) / 10;
+        petModel.level = Math.floor((Math.sqrt(25 + 40 * petModel.xp) - 5) / 10);
         // existing user get data from db
         db.collection("pets")
           .doc(petModel.owner)

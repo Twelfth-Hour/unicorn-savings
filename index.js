@@ -1,12 +1,12 @@
 const express = require("express");
-const secretKey = require("./config/stripeKey.json").secretKey;
+/*const secretKey = require("./config/stripeKey.json").secretKey;
 const stripe = require("stripe")(secretKey, {
   apiVersion: "2019-11-05"
-});
+});*/
 const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
 const pet = require("arkvatar-ts");
-const cron = require("node-cron"); 
+const cron = require("node-cron");
 const cors = require("cors");
 
 let serviceAccount = require("./config/serviceAccountKey.json");
@@ -170,8 +170,11 @@ app.post("/leaderboard/:email", (req, res) => {
 app.post("/badges", (req, res) => {
   let email = req.body.user.email;
   let dailySavings = req.body.pet.todaySaved;
-  let badges = [];
-  badges.push(1); // *For creating a new avatar
+  let badgeQuery = db
+    .collection("pets")
+    .doc(email)
+    .doc("badges");
+  badgeQuery.set({ 1: 1 });
   db.collection("users")
     .where("email", "==", email)
     .get()
@@ -179,26 +182,27 @@ app.post("/badges", (req, res) => {
       snapshot.forEach(docUser => {
         let dataUser = docUser.data();
         if (dailySavings > dataUser.daily) {
-          badges.push(3); // *Saving more than the daily saving specified
+          badgeQuery.set({ 3: 3 }); // *Saving more than the daily saving specified
         }
       });
     });
+  console.log(badgeQuery);
   db.collection("pets")
     .doc(email)
     .get()
     .then(docPet => {
       let dataPet = docPet.data();
       if (dataPet.level >= 1) {
-        badges.push(2); // *Make first savings and reach level 1
-      } else if(!dataPet.history.includes(0)) {
-        badges.push(4); // *Kept a streak for 7 days with hp as 100 and saving every day
+        badgeQuery.set({ 2: 2 }); // *Make first savings and reach level 1
+      } else if (!dataPet.history.includes(0)) {
+        badgeQuery.set({ 4: 4 }); // *Kept a streak for 7 days with hp as 100 and saving every day
       }
     });
-  res.send(badges);
+  console.log(badgeQuery);
 });
-
+/*
 //Add stripe payment gateway integration
-/* eslint-disable-next-line no-unused-vars */
+//eslint-disable-next-line no-unused-vars 
 app.post("/payment/:amount", (req, res) => {
   const amount = req.params.amount;
   stripe.customers.create({
@@ -215,7 +219,7 @@ app.post("/payment/:amount", (req, res) => {
       res.status(500).send({error: "Payment Failed,your pet is hungry!"});
     });
   });
-});
+});*/
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port}`));

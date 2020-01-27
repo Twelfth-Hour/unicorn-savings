@@ -50,7 +50,7 @@ Create your virtual pet, enjoy the features, increase your xp and hp, earn badge
 
 * Profile & Statistics Page 
 
-![Profile Page](img/profile.png) ![Statistics Page](img/stats.png)
+![Profile Page](img/profile.png)![Statistics Page](img/stats.png)
 
 
 ## Built With

@@ -42,6 +42,17 @@ yarn start
 
 Create your virtual pet, enjoy the features, increase your xp and hp, earn badges. Don't forget to ever level up! Continue saving your money with our web-app `unicorn-savings`
 
+## Demo 
+
+* Landing Page 
+
+![Landing Page](img/landing.png)
+
+* Profile & Statistics Page 
+
+![Profile Page](img/profile.png) | ![Statistics Page](img/stats.png)
+
+
 ## Built With
 
 * [Node](https://nodejs.org/en/docs/) - Node.js is an open-source, cross-platform, JavaScript runtime environment that executes JavaScript code outside of a browser.

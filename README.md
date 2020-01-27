@@ -1,6 +1,6 @@
 # Unicorn Savings 
 
-> Top 10 finalist idea for hackverse hackathon.
+> Top 10 finalist idea for [hackverse](https://hackverse.nitk.ac.in/) hackathon.
 
 Getting pocket money to survive the week and by the end with all the extras, well everyone just spends it mindlessly. This app will help you with the management of your savings and not in a boring way ofcourse. We are here with, Unicorn Savings, to gamify your experience with the savings management. 
 

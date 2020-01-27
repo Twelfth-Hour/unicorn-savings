@@ -35,7 +35,8 @@ class UserPage extends Component {
     rank: 1,
     history: [0, 0, 0, 0, 0, 0, this.props.pet.todaySaved],
     amountToSave: 0,
-    badges: []
+    badges: [],
+    withdraw: false
   };
   componentDidMount = async () => {
     if (this.props.user.auth === false) {
@@ -78,6 +79,9 @@ class UserPage extends Component {
   toggleModal = () => {
     this.setState({ modal: !this.state.modal });
   };
+  toggleWithdraw = () => {
+    this.setState({ withdraw: !this.state.withdraw });
+  };
   renderTable = () => {
     return this.state.leaderboard.map((user, index) => {
       return (
@@ -109,6 +113,27 @@ class UserPage extends Component {
     let d = await c.json();
     this.props.setPet(d);
     window.location.reload();
+  };
+  handleWitdraw = async () => {
+    if (this.props.user.savings >= this.props.user.target) {
+      await post("/user/set", {
+        id: this.props.user.id,
+        isNew: true,
+        savings: 0
+      });
+    } else {
+      await post("/pet/set", {
+        owner: this.props.user.email,
+        xp: 0,
+        history: [0, 0, 0, 0, 0, 0, 0]
+      });
+      await post("/user/set", {
+        id: this.props.user.id,
+        isNew: true,
+        savings: 0
+      });
+    }
+    this.props.history.push("/");
   };
   render() {
     const data = canvas => {
@@ -230,7 +255,7 @@ class UserPage extends Component {
               className="animation-on-hover"
               onClick={this.toggleModal}
             >
-              Pay Now
+              Invest Now
             </Button>
           </div>
           <Card id="points">
@@ -288,6 +313,23 @@ class UserPage extends Component {
               </h4>
               <h4>Your Rank: {this.state.rank}</h4>
               <h4>Total Savings: {this.props.user.savings}₹</h4>
+              <Button onClick={this.toggleWithdraw}>Withdraw</Button>
+              <Modal isOpen={this.state.withdraw} toggle={this.toggleModalDemo}>
+                <div className="modal-header">
+                  <h1 className="modal-title">Confirmation</h1>
+                </div>
+                <ModalBody>
+                  <p>Are you Sure?</p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" className="btn-simple" onClick={this.toggleWithdraw}>
+                    Close
+                  </Button>
+                  <Button color="primary" onClick={this.handleWitdraw}>
+                    Withdraw
+                  </Button>
+                </ModalFooter>
+              </Modal>
             </Col>
           </Row>
         </div>

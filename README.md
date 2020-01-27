@@ -1,6 +1,6 @@
 # Unicorn Savings 
 
-> A virtual pet for your money management. 
+> Top 10 finalist idea for hackverse hackathon.
 
 Getting pocket money to survive the week and by the end with all the extras, well everyone just spends it mindlessly. This app will help you with the management of your savings and not in a boring way ofcourse. We are here with, Unicorn Savings, to gamify your experience with the savings management. 
 
@@ -10,6 +10,9 @@ Getting pocket money to survive the week and by the end with all the extras, wel
 2. Yarn
 
 ## Installing
+
+> Note : While building up your local copy on the system there are certain config files that are hidden from the user. However, one can easily continue with their own config. One major config is the firebase config, for back-end you must create a new project in firebase(name it as `unicorn-savings-<your username>`) and download its serviceAccountKey.json and paste it in the config file. Within the client side, you must require the firebase config for your app, hence you need to create an app first within your firebase project(name the app same as the project) and copy the config of the firebase sdk provided and paste it in `client/src/config`. Along with the firebase config you need to have an assets folder within `client/src` that will provide the assets for the project. One can message any of the contributors to get the copy of the assets.
+
 
 To get a copy of the website running on your local system, proceed with the following steps: 
 

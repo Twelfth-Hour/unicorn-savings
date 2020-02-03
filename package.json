@@ -13,7 +13,7 @@
     "lint": "eslint . --fix",
     "pretty": "prettier '**/*.js' --write",
     "format": "npm run pretty && npm run lint",
-    "heroku-postbuild":  "NPM_CONFIG_PRODUCTION=false npm install --prefix client   && npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client   && npm run build --prefix client"
   },
   "dependencies": {
     "arkvatar-ts": "^1.0.3",
@@ -23,6 +23,7 @@
     "express": "^4.17.1",
     "firebase-admin": "^8.9.2",
     "node-cron": "^2.0.3",
+    "path": "^0.12.7",
     "stripe": "^8.7.0"
   }
 }

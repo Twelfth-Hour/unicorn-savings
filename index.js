@@ -5,6 +5,7 @@ const express = require("express");
 //  apiVersion: "2019-11-05"
 //});
 const bodyParser = require("body-parser");
+const path = require("path");
 const admin = require("firebase-admin");
 const pet = require("arkvatar-ts");
 const cron = require("node-cron");
@@ -17,6 +18,9 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+
+// Setup for static pages
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 //Initialize Firebase
 admin.initializeApp({

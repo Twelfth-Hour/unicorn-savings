@@ -1,5 +1,6 @@
+require("dotenv").config();
 const express = require("express");
-//const secretKey = require("./config/stripeKey.json").secretKey;
+//const secretKey = process.env.STRIPE_SECRETKEY;
 //const stripe = require("stripe")(secretKey, {
 //  apiVersion: "2019-11-05"
 //});
@@ -9,7 +10,7 @@ const pet = require("arkvatar-ts");
 const cron = require("node-cron");
 const cors = require("cors");
 
-let serviceAccount = require("./config/serviceAccountKey.json");
+let serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
 const app = express();
 
 // Setup for Body Parser

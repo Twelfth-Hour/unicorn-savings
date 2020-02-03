@@ -20,7 +20,17 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Setup for static pages
-app.use("/public", express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
+if (process.env.NODE_ENV === 'production') {
+  // Exprees will serve up production assets
+    app.use(express.static('client/build'));
+}
+
+// Get the page for heroku
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
+
 
 //Initialize Firebase
 admin.initializeApp({

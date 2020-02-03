@@ -12,7 +12,8 @@
     "start": "node index.js",
     "lint": "eslint . --fix",
     "pretty": "prettier '**/*.js' --write",
-    "format": "npm run pretty && npm run lint"
+    "format": "npm run pretty && npm run lint",
+    "heroku-postbuild":  "NPM_CONFIG_PRODUCTION=false npm install --prefix client   && npm run build --prefix client"
   },
   "dependencies": {
     "arkvatar-ts": "^1.0.3",

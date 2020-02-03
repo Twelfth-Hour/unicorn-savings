@@ -26,7 +26,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier '**/*.js' --write"
+    "format": "prettier '**/*.js' --write",
+    "postinstall": "react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"

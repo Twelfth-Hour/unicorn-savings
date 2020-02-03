@@ -24,6 +24,7 @@ admin.initializeApp({
 });
 let db = admin.firestore();
 
+
 // Add crone to run check every midnight
 cron.schedule("0 0 0 * * *", () => {
   db.collection("pets")

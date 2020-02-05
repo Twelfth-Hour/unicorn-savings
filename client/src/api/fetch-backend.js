@@ -1,5 +1,5 @@
 export const post = async (path, data) => {
-  return await fetch(`http://localhost:5000${path}`, {
+  return await fetch(`${path}`, {
     headers: {
       "Content-Type": "application/json"
     },

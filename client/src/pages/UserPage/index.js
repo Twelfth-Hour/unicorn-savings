@@ -76,6 +76,7 @@ class UserPage extends Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
+  
   toggleModal = () => {
     this.setState({ modal: !this.state.modal });
   };
@@ -93,6 +94,11 @@ class UserPage extends Component {
       );
     });
   };
+
+  handleSignout = () => {
+    this.props.history.push("/");
+  };
+  
   handlePayField = e => {
     this.setState({ amountToSave: e.target.value });
   };
@@ -217,6 +223,11 @@ class UserPage extends Component {
     };
     return (
       <div className="UserPage">
+        <nav className="nav">
+          <Button color="primary" onClick={this.handleSignout}>
+            Logout
+          </Button>
+        </nav>
         <div id="hero">
           <Card id="main" style={{ width: "20rem" }}>
             <CardImg top src={`https://arkvatar.com/arkvatar/${this.props.user.email}`} alt="..." />

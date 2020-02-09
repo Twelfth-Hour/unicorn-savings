@@ -1,6 +1,15 @@
 .UserPage {
   padding: 20px 15%;
 
+  nav {
+    display: flex;
+    flex-direction: row-reverse;
+
+    button {
+      margin: 20px;
+    }
+  }
+
   #hero {
     display: flex;
     justify-content: space-evenly;

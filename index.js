@@ -21,23 +21,21 @@ app.use(cors());
 
 // Setup for static pages
 app.use(express.static(path.join(__dirname, "public")));
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
   // Exprees will serve up production assets
-    app.use(express.static('client/build'));
+  app.use(express.static("client/build"));
 }
 
 // Get the page for heroku
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 });
-
 
 //Initialize Firebase
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 let db = admin.firestore();
-
 
 // Add crone to run check every midnight
 cron.schedule("0 0 0 * * *", () => {
@@ -46,16 +44,16 @@ cron.schedule("0 0 0 * * *", () => {
     .then(snapshot => {
       snapshot.forEach(doc => {
         let data = doc.data();
-        let history = data.history;
-        history.shift();
+        data.history.shift();
         if (!data.hasPaid) {
-          history.push(data.todaySaved);
-          let hp = data.hp - 2;
+          data.history.push(data.todaySaved);
+          let hp = data.hp - 0.02;
+          let todaySaved = 0;
           db.collection("pets")
             .doc(data.owner)
-            .update({ hp });
+            .update({ hp, todaySaved });
         } else {
-          history.push(data.todaySaved);
+          data.history.push(data.todaySaved);
           let hasPaid = false;
           let todaySaved = 0;
           db.collection("pets")

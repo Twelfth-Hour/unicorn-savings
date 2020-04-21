@@ -45,6 +45,18 @@
         margin-bottom: 5px;
       }
     }
+
+    @media screen and (min-width: 750px) and (max-width: 1024px) {
+      #points {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 750px) {
+      #target, #points {
+        display: none;
+      }
+    }
   }
 
   #stats {

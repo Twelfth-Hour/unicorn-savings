@@ -76,7 +76,7 @@ class UserPage extends Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
-  
+
   toggleModal = () => {
     this.setState({ modal: !this.state.modal });
   };
@@ -98,7 +98,7 @@ class UserPage extends Component {
   handleSignout = () => {
     this.props.history.push("/");
   };
-  
+
   handlePayField = e => {
     this.setState({ amountToSave: e.target.value });
   };

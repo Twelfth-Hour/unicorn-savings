@@ -331,7 +331,7 @@ class UserPage extends Component {
               trailColor: "#fff"
             })}
           />
-          ; &nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;
           <CircularProgressbar
             value={(this.props.pet.xp * 100) / this.state.nextLevel}
             text={"XP"}
@@ -342,7 +342,6 @@ class UserPage extends Component {
               trailColor: "#fff"
             })}
           />
-          ;
         </div>
         <div id="stats">
           <Row>

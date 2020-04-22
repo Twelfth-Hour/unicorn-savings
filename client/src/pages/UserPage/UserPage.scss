@@ -46,15 +46,64 @@
       }
     }
 
-    @media screen and (min-width: 750px) and (max-width: 1024px) {
+    @media screen and (min-width: 745px) and (max-width: 1024px) {
       #points {
         display: none;
       }
     }
 
-    @media screen and (max-width: 750px) {
+    @media screen and (max-width: 745px) {
       #target, #points {
         display: none;
+      }
+    }
+  }
+
+  #points-small, #points-vsmall {
+    display: none;
+  }
+
+  @media screen and (min-width: 745px) and (max-width: 1024px) {
+    #points-small {
+      display: block;
+
+      #health {
+        float: left;
+        margin-right: calc(100% - 15rem);
+      }
+
+      #progress {
+        margin-bottom: 30px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 745px) {
+    #points-vsmall {
+      display: block;
+
+      .CircularProgressbar {
+        width: 40%;
+        margin-bottom: 30px;
+      }
+    }
+  }
+
+  #target-vsmall {
+    display: none;
+  }
+
+  @media screen and (max-width: 745px) {
+    #target-vsmall {
+      display: block; 
+      
+      #money-left {
+        float: left;
+        margin-right: 2.5rem;
+      }
+
+      #pay-button {
+        margin-bottom: 2rem;
       }
     }
   }

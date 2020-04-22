@@ -14,6 +14,8 @@ import {
   Table
 } from "reactstrap";
 import { Line } from "react-chartjs-2";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 import { post } from "../../api/fetch-backend";
 import { authenticateUser, setPet } from "../../actions";
@@ -276,6 +278,71 @@ class UserPage extends Component {
             <Progress color="success" value={(this.props.pet.xp * 100) / this.state.nextLevel} />
             <h1>Level: {this.props.pet.level}</h1>
           </Card>
+        </div>
+        <div id="points-small">
+          <h1 id="health">Health</h1>
+          <h1 id="level">Level: {this.props.pet.level}</h1>
+          <Progress id="progress" color="danger" value={this.props.pet.hp} />
+          <h1 id="xp">XP</h1>
+          <Progress
+            id="progress"
+            color="success"
+            value={(this.props.pet.xp * 100) / this.state.nextLevel}
+          />
+        </div>
+        <div id="target-vsmall">
+          <h1>Todays Target</h1>
+          <h1 id="money-left">{this.props.user.daily - this.props.pet.todaySaved}₹</h1>
+          <Modal isOpen={this.state.modal} toggle={this.toggleModalDemo}>
+            <div className="modal-header">
+              <h1 className="modal-title">Select Amount</h1>
+            </div>
+            <ModalBody>
+              <p>Amount to Save</p>
+              <input type="number" value={this.state.amountToSave} onChange={this.handlePayField} />
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" className="btn-simple" onClick={this.toggleModal}>
+                Close
+              </Button>
+              <Button color="primary" onClick={this.handlePay}>
+                Pay
+              </Button>
+            </ModalFooter>
+          </Modal>
+          <Button
+            id="pay-button"
+            color="success"
+            className="animation-on-hover"
+            onClick={this.toggleModal}
+          >
+            Invest Now
+          </Button>
+        </div>
+        <div id="points-vsmall">
+          <h1 id="level">Scores At Level {this.props.pet.level}</h1>
+          <CircularProgressbar
+            value={this.props.pet.hp}
+            text={"HP"}
+            strokeWidth={"4"}
+            styles={buildStyles({
+              pathColor: "#fd5d93",
+              textColor: "#fff",
+              trailColor: "#fff"
+            })}
+          />
+          ; &nbsp;&nbsp;&nbsp;&nbsp;
+          <CircularProgressbar
+            value={(this.props.pet.xp * 100) / this.state.nextLevel}
+            text={"XP"}
+            strokeWidth={"4"}
+            styles={buildStyles({
+              pathColor: "#00f2c3",
+              textColor: "#fff",
+              trailColor: "#fff"
+            })}
+          />
+          ;
         </div>
         <div id="stats">
           <Row>
